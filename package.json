@@ -23,7 +23,7 @@
     "youtube-transcript": "^1.2.1"
   },
   "devDependencies": {
-    "electron-builder": "^23.6.0",
+    "electron-builder": "^26.0.12",
     "electron": "^35.1.2"
   },
   "build": {
