@@ -10,18 +10,9 @@ module.exports = {
     {
       name: '@electron-forge/maker-squirrel',
       config: {
-        // Allow the installer to request admin privileges
-        requestedExecutionLevel: 'requireAdministrator'
       },
       // Optionally, restrict to Windows only:
       // platforms: ['win32']
-    },
-    {
-      name: '@electron-forge/maker-wix',
-      config: {
-        // Wix maker configuration for MSI packaging; add options as needed
-      },
-      platforms: ['win32']
     },
     {
       name: '@electron-forge/maker-dmg',
