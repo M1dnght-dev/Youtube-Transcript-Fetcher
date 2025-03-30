@@ -4,7 +4,8 @@ on:
   push:
     tags:
       - 'v*.*.*'  # Adjust the tag pattern as needed
-
+  workflow_dispatch:
+    
 jobs:
   build_and_release:
     runs-on: ${{ matrix.os }}
