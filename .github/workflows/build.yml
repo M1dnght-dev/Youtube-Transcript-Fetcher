@@ -7,18 +7,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_and_release:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        include:
-          - os: ubuntu-latest
-            target: linux
-          - os: windows-latest
-            target: win
-          - os: macos-latest
-            target: mac
-
+  build_linux:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -29,7 +19,52 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build and package Electron app
-        run: pnpx electron-builder --${{ matrix.target }} --publish always
+      - name: Build and package Electron app for Linux
+        run: pnpx electron-builder --linux --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build_windows:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up PNPM
+        uses: pnpm/action-setup@v4
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Install Wine and Mono
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          sudo apt-get install -y wine64 wine32
+          # Install Mono for Windows builds
+          sudo apt-get install -y mono-devel
+          # Install Wine dependencies for Electron
+          sudo apt-get install -y libgtk-3-0 libgconf-2-4 libnss3 libasound2 libatk1.0-0 libcups2 libdbus-glib-1-2 libfontconfig1 libgdk-pixbuf2.0-0 libglib2.0-0 libnotify4 libpango-1.0-0 libsoup2.4-1 libx11-xcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1
+          # Install Wine and Mono for building Windows apps
+
+      - name: Build and package Electron app for Windows
+        run: pnpx electron-builder --win --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build_macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up PNPM
+        uses: pnpm/action-setup@v4
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build and package Electron app for macOS
+        run: pnpx electron-builder --mac --publish always
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
