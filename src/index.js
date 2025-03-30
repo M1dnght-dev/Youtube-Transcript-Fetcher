@@ -51,7 +51,8 @@ app.on('window-all-closed', () => {
   }
 });
 
-// New code: ipcMain handler for fetching transcript
+const fs = require('fs/promises'); // Use the promises API for async file operations
+
 ipcMain.handle('fetch-transcript', async (event, videoId) => {
   try {
     const transcript = await YoutubeTranscript.fetchTranscript(videoId);
@@ -64,17 +65,14 @@ ipcMain.handle('fetch-transcript', async (event, videoId) => {
       filters: [{ name: 'Text Files', extensions: ['txt'] }],
     });
 
-    if (canceled) {
+    if (canceled || !filePath) {
       return { success: false, error: 'Save operation was canceled.' };
     }
 
-    // Write the transcript to the selected file path
-    writeFileSync(filePath, text);
+    // Write the transcript to the selected file path asynchronously
+    await fs.writeFile(filePath, text, 'utf8');
     return { success: true, filePath };
   } catch (error) {
     return { success: false, error: error.message };
   }
 });
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
