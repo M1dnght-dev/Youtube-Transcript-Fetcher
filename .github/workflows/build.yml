@@ -5,30 +5,26 @@ on:
     tags:
       - 'v*.*.*'  # Adjust the tag pattern as needed
   workflow_dispatch:
-    
+
 jobs:
   build_and_release:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        target: 
-          - linux
-          - win
-          - mac
+        include:
+          - os: ubuntu-latest
+            target: linux
+          - os: windows-latest
+            target: win
+          - os: macos-latest
+            target: mac
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'pnpm'
-
-      - name: Install pnpm
-        run: npm install -g pnpm
+      - name: Set up PNPM
+        uses: pnpm/action-setup@v4
 
       - name: Install dependencies
         run: pnpm install
