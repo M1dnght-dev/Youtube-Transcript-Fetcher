@@ -46,7 +46,7 @@
       ]
     },
     "mac": {
-      "target": "pkg",
+      "target": "dmg",
       "category": "public.app-category.utilities"
     },
     "linux": {
