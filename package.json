@@ -23,12 +23,13 @@
     "youtube-transcript": "^1.2.1"
   },
   "devDependencies": {
-    "electron-builder": "^23.6.0",
-    "electron": "^35.1.2"
+    "electron-builder": "^26.0.12",
+    "electron": "^35.1.2",
+    "dmg-license": "^1.0.3"
   },
   "build": {
     "appId": "dev.zyztem.youtube-transcript-fetcher",
-    "productName": "transcripts",
+    "productName": "Youtube Transcript Fetcher",
     "directories": {
       "output": "dist"
     },
@@ -37,10 +38,15 @@
       "package.json"
     ],
     "win": {
-      "target": "msi"
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ]
     },
     "mac": {
-      "target": "dmg",
+      "target": "pkg",
       "category": "public.app-category.utilities"
     },
     "linux": {
@@ -53,5 +59,6 @@
         "repo": "youtube-transcript-fetcher"
       }
     ]
-  }
+  },
+  "packageManager": "pnpm@10.7.0+sha512.6b865ad4b62a1d9842b61d674a393903b871d9244954f652b8842c2b553c72176b278f64c463e52d40fff8aba385c235c8c9ecf5cc7de4fd78b8bb6d49633ab6"
 }
