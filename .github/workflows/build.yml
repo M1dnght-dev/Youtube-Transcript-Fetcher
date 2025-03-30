@@ -20,12 +20,12 @@ jobs:
         run: pnpm install
 
       - name: Build and package Electron app for Linux
-        run: pnpx electron-builder --linux --publish always
+        run: pnpm build --linux --publish always
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build_windows:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -35,10 +35,15 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
-
+      
+      - name: Install Wine and Mono
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt update
+          sudo apt install -y --install-recommends wine64 wine32 mono-complete
 
       - name: Build and package Electron app for Windows
-        run: pnpx electron-builder --win --publish always
+        run: pnpm build --win --publish always
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -55,6 +60,6 @@ jobs:
         run: pnpm install
 
       - name: Build and package Electron app for macOS
-        run: pnpx electron-builder --mac --publish always
+        run: pnpm build --mac --publish always
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
