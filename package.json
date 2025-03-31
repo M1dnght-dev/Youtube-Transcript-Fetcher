@@ -41,16 +41,27 @@
       "target": [
         {
           "target": "nsis",
-          "arch": ["x64"]
+          "arch": ["x64", "arm64"]
         }
       ]
     },
     "mac": {
-      "target": "pkg",
-      "category": "public.app-category.utilities"
+      "target": [
+        {
+          "target": "pkg",
+          "arch": ["x64", "arm64"]
+        }
+      ],
+      "category": "public.app-category.utilities",
+      "minimumSystemVersion": "10.10"
     },
     "linux": {
-      "target": "deb"
+      "target": [
+        {
+          "target": "deb",
+          "arch": ["x64", "arm64"]
+        }
+      ]
     },
     "publish": [
       {
