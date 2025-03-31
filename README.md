@@ -1,5 +1,6 @@
 # YouTube Transcript Fetcher
 
+[![Build and Release Electron App](https://github.com/Zyztem/Youtube-Transcript-Fetcher/actions/workflows/build.yml/badge.svg)](https://github.com/Zyztem/Youtube-Transcript-Fetcher/actions/workflows/build.yml)
 <!-- Table of Contents -->
 ## Table of Contents
 - [YouTube Transcript Fetcher](#youtube-transcript-fetcher)
