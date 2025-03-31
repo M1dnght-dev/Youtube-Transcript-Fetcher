@@ -1,17 +1,11 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('node:path');
 const { YoutubeTranscript } = require('youtube-transcript');
-const { writeFileSync } = require('fs');
-
-// Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (require('electron-squirrel-startup')) {
-  app.quit();
-}
+const { writeFile } = require('fs').promises;
 
 let mainWindow;
 
 const createWindow = () => {
-  // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
@@ -22,19 +16,12 @@ const createWindow = () => {
     },
   });
   mainWindow.setMenuBarVisibility(false);
-  // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
-
 };
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   createWindow();
 
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();
@@ -42,37 +29,45 @@ app.whenReady().then(() => {
   });
 });
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 
-const fs = require('fs/promises'); // Use the promises API for async file operations
+// Function to fetch transcript
+const fetchTranscript = async (videoId) => {
+  if (!videoId) {
+    throw new Error('Invalid video ID.');
+  }
+  const transcript = await YoutubeTranscript.fetchTranscript(videoId);
+  return transcript.map(entry => entry.text).join(' ');
+};
 
+// Function to save transcript to a file
+const saveTranscriptToFile = async (text, videoId) => {
+  const { canceled, filePath } = await dialog.showSaveDialog(mainWindow, {
+    title: 'Save Transcript',
+    defaultPath: `${videoId}.txt`,
+    filters: [{ name: 'Text Files', extensions: ['txt'] }],
+  });
+
+  if (canceled || !filePath) {
+    throw new Error('Save operation was canceled.');
+  }
+
+  await writeFile(filePath, text, 'utf8');
+  return filePath;
+};
+
+// IPC handler for fetching and saving transcript
 ipcMain.handle('fetch-transcript', async (event, videoId) => {
   try {
-    const transcript = await YoutubeTranscript.fetchTranscript(videoId);
-    const text = transcript.map(entry => entry.text).join(' ');
-
-    // Open a save dialog to let the user choose where to save the file
-    const { canceled, filePath } = await dialog.showSaveDialog(mainWindow, {
-      title: 'Save Transcript',
-      defaultPath: `${videoId}.txt`,
-      filters: [{ name: 'Text Files', extensions: ['txt'] }],
-    });
-
-    if (canceled || !filePath) {
-      return { success: false, error: 'Save operation was canceled.' };
-    }
-
-    // Write the transcript to the selected file path asynchronously
-    await fs.writeFile(filePath, text, 'utf8');
+    const text = await fetchTranscript(videoId);
+    const filePath = await saveTranscriptToFile(text, videoId);
     return { success: true, filePath };
   } catch (error) {
+    console.error('Error in fetch-transcript handler:', error);
     return { success: false, error: error.message };
   }
 });

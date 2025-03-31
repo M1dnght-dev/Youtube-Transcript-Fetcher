@@ -33,22 +33,19 @@
         <span>&copy; <script>document.write(new Date().getFullYear());</script></span> Zyztem. All rights reserved.
     </footer>
     <script>
-        document.getElementById("current-year").textContent = new Date().getFullYear();
         const fetchButton = document.getElementById('fetchButton');
         const videoIdInput = document.getElementById('videoId');
         const status = document.getElementById('status');
 
-        // Function to extract video ID from a YouTube URL or return the input if it's already an ID
         function extractVideoId(input) {
             try {
                 const url = new URL(input);
                 if (url.hostname === 'www.youtube.com' || url.hostname === 'youtube.com') {
-                    return url.searchParams.get('v'); // Extract the 'v' parameter
+                    return url.searchParams.get('v');
                 } else if (url.hostname === 'youtu.be') {
-                    return url.pathname.substring(1); // Extract the path after '/'
+                    return url.pathname.substring(1);
                 }
             } catch (e) {
-                // If input is not a valid URL, assume it's a video ID
                 return input;
             }
         }
@@ -66,13 +63,18 @@
             status.textContent = 'Fetching transcript...';
             status.className = 'text-blue-500 text-center';
 
-            const result = await window.api.fetchTranscript(videoId);
+            try {
+                const result = await window.api.fetchTranscript(videoId);
 
-            if (result.success) {
-                status.textContent = `Transcript saved to: ${result.filePath}`;
-                status.className = 'text-green-500 text-center';
-            } else {
-                status.textContent = `Error: ${result.error}`;
+                if (result.success) {
+                    status.textContent = `Transcript saved to: ${result.filePath}`;
+                    status.className = 'text-green-500 text-center';
+                } else {
+                    status.textContent = `Error: ${result.error}`;
+                    status.className = 'text-red-500 text-center';
+                }
+            } catch (error) {
+                status.textContent = 'An unexpected error occurred.';
                 status.className = 'text-red-500 text-center';
             }
         });
