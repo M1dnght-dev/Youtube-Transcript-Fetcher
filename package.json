@@ -48,8 +48,9 @@
     "mac": {
       "target": [
         {
-          "target": "pkg",
-          "arch": ["x64", "arm64"]
+          "target": "dmg",
+          "arch": ["x64", "arm64"],
+          "artifactName": "Youtube Transcript Fetcher-${version}-${arch}.dmg"
         }
       ],
       "category": "public.app-category.utilities",
