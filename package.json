@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "electron-builder": "^26.0.12",
-    "electron": "^35.1.2",
+    "electron": "^35.7.5",
     "dmg-license": "^1.0.3"
   },
   "build": {
