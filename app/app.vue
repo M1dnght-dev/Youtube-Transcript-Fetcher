@@ -72,9 +72,9 @@
       <p>
         &copy; {{ new Date().getFullYear() }} <NuxtLink href="https://github.com/M1dnght-dev" class="underline hover:text-white transition duration-300">M1dnght-dev</NuxtLink>. All rights reserved.
         |
-        <NuxtLink href="/terms" class="underline hover:text-white transition duration-300">Terms of Service</NuxtLink>
-        |
-        <NuxtLink href="/privacy" class="underline hover:text-white transition duration-300">Privacy Policy</NuxtLink>
+        <NuxtLink href="https://m1dnght.dev/terms" class="underline hover:text-white transition duration-300">Terms of Service</NuxtLink>
+        | 
+        <NuxtLink href="https://m1dnght.dev/privacy" class="underline hover:text-white transition duration-300">Privacy Policy</NuxtLink>
       </p>
     </footer>
   </div>
