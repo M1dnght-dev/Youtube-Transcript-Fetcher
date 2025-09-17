@@ -1,75 +1,32 @@
-# Nuxt Minimal Starter
+# ytxt – YouTube Transcript Fetcher
+**ytxt** is a minimal, blazing-fast web app to get transcripts from any public YouTube video—instantly.  
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+🌐 **Visit the site:** [https://ytxt.m1dnght.dev](https://ytxt.m1dnght.dev)  
+No downloads needed, just paste your video link and get the transcript in seconds!
 
-## Setup
+---
 
-Make sure to install dependencies:
+## ✨ Features
+- 🚀 **Instant Transcripts** – Paste a YouTube URL or video ID and get the transcript immediately.  
+- 💾 **Optional Download** – Grab a `.txt` copy if you want, but no installation required.  
+- 🎨 **Beautiful & Simple UI** – Sleek animations, clean design, smooth experience.  
+- 🖥 **Works Everywhere** – Desktop, mobile, tablet—ytxt just works.  
+- 🔒 **Privacy-Friendly** – No login, no tracking, nothing stored on our servers.
 
-```bash
-# npm
-npm install
+---
 
-# pnpm
-pnpm install
+## 🛠 Built With
+- [Nuxt 4](https://nuxt.com) – Modern Vue 3 framework  
+- [Tailwind CSS](https://tailwindcss.com) – Fast, responsive styling  
+- [Nitro](https://nitro.unjs.io) – Server-side API for fetching transcripts  
+- [TypeScript](https://www.typescriptlang.org) – Clean, safe code
 
-# yarn
-yarn install
+---
 
-# bun
-bun install
-```
+## 🚀 How to Use
+1. Go to [https://ytxt.m1dnght.dev](https://ytxt.m1dnght.dev)  
+2. Paste the YouTube URL or video ID  
+3. See your transcript instantly  
+4. Click **Download** if you want a `.txt` copy (optional)
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+No installs. No clutter. Just paste and go!
