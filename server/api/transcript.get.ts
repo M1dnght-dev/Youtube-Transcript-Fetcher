@@ -47,6 +47,10 @@ export default defineEventHandler(async (event) => {
     return { success: true, transcript: transcriptText }
   } catch (err: any) {
     console.error('[Server] fetchTranscript error:', err)
-    return { success: false, error: err.message ?? 'Unknown error' }
+    return {
+      success: false,
+      error: err.message ?? 'Unknown error',
+      details: err.stack ?? err
+    }
   }
 })

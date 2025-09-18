@@ -100,6 +100,11 @@ function extractVideoId(input: string) {
   return input;
 }
 
+function isDebugMode() {
+  // @ts-ignore
+  return typeof window !== "undefined" && window.debug === true;
+}
+
 const fetchTranscript = async () => {
   const videoId = extractVideoId(videoInput.value.trim());
   if (!videoId) {
@@ -124,17 +129,25 @@ const fetchTranscript = async () => {
       status.value = "✅ Transcript fetched successfully!";
       statusClass.value = "text-green-400";
     } else if ("error" in data && typeof data.error === "string") {
-      if (data.error.toLowerCase().includes("no transcripts are available")) {
+      if ("details" in data && typeof data.details === "string" && isDebugMode()) {
+        // eslint-disable-next-line no-console
+        console.warn("Transcript fetch error details:", data.details);
+      }
+      if (
+        data.error.toLowerCase().includes("no transcripts are available") ||
+        data.error.toLowerCase().includes("transcript is empty or unavailable")
+      ) {
         status.value =
           `❌ No transcripts are available for this video. ` +
           `Possible reasons:\n` +
           `• The video does have captions, but they may be auto-generated and not accessible via the API.\n` +
           `• The captions may be in a language not supported by the fetcher.\n` +
-          `• The video owner may have restricted access to captions.\n\n` +
+          `• The video owner may have restricted access to captions.\n` +
+          `• YouTube may be blocking requests from this server (common in production environments).\n\n` +
           `Troubleshooting:\n` +
           `- Try refreshing the page and fetching again.\n` +
           `- Check if the video has captions enabled on YouTube.\n` +
-          `- If you believe captions exist, please report this issue.`;
+          `- If you believe captions exist, please report this issue.\n`;
         statusClass.value = "text-yellow-400 whitespace-pre-line";
       } else {
         status.value = `Error: ${data.error || "Unknown error"}`;
@@ -145,6 +158,10 @@ const fetchTranscript = async () => {
       statusClass.value = "text-red-500";
     }
   } catch (err: any) {
+    if (isDebugMode() && err?.stack) {
+      // eslint-disable-next-line no-console
+      console.error("Unexpected error details:", err.stack);
+    }
     status.value = `Unexpected error: ${err?.message || "Unknown error"}`;
     statusClass.value = "text-red-500";
   } finally {
