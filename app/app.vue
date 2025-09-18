@@ -119,12 +119,29 @@ const fetchTranscript = async () => {
       params: { videoId },
     });
 
-    if (data?.success) {
+    if (data?.success && "transcript" in data) {
       transcript.value = data.transcript;
       status.value = "✅ Transcript fetched successfully!";
       statusClass.value = "text-green-400";
+    } else if ("error" in data && typeof data.error === "string") {
+      if (data.error.toLowerCase().includes("no transcripts are available")) {
+        status.value =
+          `❌ No transcripts are available for this video. ` +
+          `Possible reasons:\n` +
+          `• The video does have captions, but they may be auto-generated and not accessible via the API.\n` +
+          `• The captions may be in a language not supported by the fetcher.\n` +
+          `• The video owner may have restricted access to captions.\n\n` +
+          `Troubleshooting:\n` +
+          `- Try refreshing the page and fetching again.\n` +
+          `- Check if the video has captions enabled on YouTube.\n` +
+          `- If you believe captions exist, please report this issue.`;
+        statusClass.value = "text-yellow-400 whitespace-pre-line";
+      } else {
+        status.value = `Error: ${data.error || "Unknown error"}`;
+        statusClass.value = "text-red-500";
+      }
     } else {
-      status.value = `Error: ${data?.error || "Unknown error"}`;
+      status.value = "Error: Unknown response from server.";
       statusClass.value = "text-red-500";
     }
   } catch (err: any) {
